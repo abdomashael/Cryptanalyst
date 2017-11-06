@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Cryptanalyst</string>
+    <string name="select_method" translatable="false">Select Method</string>
+    <string name="enter_key" translatable="false">Key</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="insert_text" translatable="false">Insert Text :</string>
+    <string name="insert_text_here" translatable="false">Insert your text here</string>
+    <string name="insert_key_here" translatable="false">Insert your key here</string>
+
+
+    <string-array name="methods">
+        <item>Caesar Cipher</item>
+        <item>Playfair Cipher</item>
+        <item>Polyalphabtic Ciphers</item>
+        <item>Rail Fence</item>
+        <item>Use of permutation</item>
+    </string-array>
+
+<string-array name="cryption">
+        <item>Encryption</item>
+        <item>Decryption</item>
+
+    </string-array>
+
+</resources>
