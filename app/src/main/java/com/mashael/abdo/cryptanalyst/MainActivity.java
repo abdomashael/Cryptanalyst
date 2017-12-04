@@ -15,6 +15,13 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+
 public class MainActivity extends Activity {
 
     Spinner cryptionMethod;
@@ -49,7 +56,7 @@ public class MainActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cryptionMethodsValue = String.valueOf(cryptionMethod.getSelectedItem());
-                if ((cryptionMethodsValue.equals("Caesar Cipher") || cryptionMethodsValue.equals("Playfair Cipher")|| cryptionMethodsValue.equals("Use of permutation") || cryptionMethodsValue.equals("Polyalphabtic Ciphers")) && key.getVisibility() == View.GONE) {
+                if ((cryptionMethodsValue.equals("Caesar Cipher") || cryptionMethodsValue.equals("Playfair Cipher")|| cryptionMethodsValue.equals("Use of permutation") || cryptionMethodsValue.equals("Polyalphabtic Ciphers")|| cryptionMethodsValue.equals("Des")) && key.getVisibility() == View.GONE) {
 
                     key.setVisibility(View.VISIBLE);
                     keyWord.setVisibility(View.VISIBLE);
@@ -72,7 +79,7 @@ public class MainActivity extends Activity {
     }
 
 
-    public void onClickOk(View view) {
+    public void onClickOk(View view) throws InvalidKeyException {
 
         cryptionMethodsValue = String.valueOf(cryptionMethod.getSelectedItem());
         cryptionModeValue = String.valueOf(cryptionMode.getSelectedItem());
@@ -131,6 +138,23 @@ public class MainActivity extends Activity {
                             UseOfPermutation useOfPermutation = new UseOfPermutation(1, textValue, keyValue,this);
                             result.setText(useOfPermutation.getResult());
                         }
+                    }else if (cryptionMethodsValue.equals("Des")) {
+
+                        String password = keyValue;
+                        SecretKeyFactory keyFactory = null;
+                        try {
+                            DESKeySpec key = new DESKeySpec(password.getBytes());
+                            keyFactory = SecretKeyFactory.getInstance("DES");
+                            //Instantiate the encrypter/decrypter
+                            Des crypt = new Des(keyFactory.generateSecret(key));
+                            String unencryptedString = textValue;
+                            String encryptedString = crypt.encryptBase64(unencryptedString);
+                            result.setText(encryptedString);
+                        } catch (NoSuchAlgorithmException e ) {
+                        } catch (InvalidKeySpecException e) {
+                        } catch (Exception e) {
+                        }
+
 
                     } else {
                         Toast.makeText(this, "plz Insert Key ", Toast.LENGTH_LONG).show();
@@ -187,7 +211,26 @@ public class MainActivity extends Activity {
                             result.setText(useOfPermutation.getResult());
                         }
 
-                    } else {
+                    } else if (cryptionMethodsValue.equals("Des")) {
+
+                        String password = keyValue;
+                        SecretKeyFactory keyFactory = null;
+
+                        try {
+                            DESKeySpec key = new DESKeySpec(password.getBytes());
+                            keyFactory = SecretKeyFactory.getInstance("DES");
+                            //Instantiate the encrypter/decrypter
+                            Des crypt = new Des(keyFactory.generateSecret(key));
+                            String encryptedString = textValue;
+                            String unencryptedString = crypt.decryptBase64(encryptedString);
+                            result.setText(unencryptedString);
+                        } catch (NoSuchAlgorithmException e ) {
+                        } catch (InvalidKeySpecException e) {
+                        } catch (Exception e) {
+                        }
+
+
+                    }else {
                         Toast.makeText(this, "plz Insert Key ", Toast.LENGTH_LONG).show();
                     }
 
